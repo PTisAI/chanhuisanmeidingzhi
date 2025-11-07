@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="GBK">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>忏悔三昧</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #f8f4e9 0%, #efe7d5 100%);
+            color: #5a3921;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 佛教元素背景 */
+        .buddha-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(211, 189, 156, 0.08) 0.5px, transparent 0.5px),
+                radial-gradient(circle at 90% 80%, rgba(211, 189, 156, 0.08) 0.5px, transparent 0.5px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+        
+        .lotus {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 180px;
+            height: 180px;
+            background-image: 
+                radial-gradient(circle at 70% 70%, rgba(180, 150, 100, 0.1) 8px, transparent 8px),
+                radial-gradient(circle at 30% 30%, rgba(180, 150, 100, 0.1) 6px, transparent 6px);
+            transform: rotate(45deg);
+            z-index: -1;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 253, 245, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 6px 25px rgba(90, 57, 33, 0.12);
+            border: 2px solid #d9c7a1;
+            padding: 22px 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "卍";
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 130px;
+            color: rgba(211, 189, 156, 0.1);
+            z-index: 0;
+            font-weight: 700;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title h1 {
+            font-size: 24px;
+            color: #8d5a2d;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.08);
+            font-weight: 700;
+        }
+        
+        .title .divider {
+            height: 2.5px;
+            background: linear-gradient(to right, transparent, #c9a87a, transparent);
+            margin: 10px auto;
+            width: 80%;
+            border-radius: 2px;
+        }
+        
+        .prayer-content {
+            font-size: 16px;
+            line-height: 1.85;
+            text-align: center;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding: 10px 6px;
+            font-weight: 600;
+        }
+        
+        .prayer-content p {
+            margin-bottom: 14px;
+            text-indent: 2em;
+            text-align: left;
+        }
+        
+        .prayer-content .verse {
+            font-weight: 700;
+            font-size: 17px;
+            color: #7a5229;
+            text-align: center;
+            margin: 16px 0;
+            text-indent: 0;
+            line-height: 1.95;
+            letter-spacing: 0.5px;
+        }
+        
+        .counter-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            margin-top: 12px;
+        }
+        
+        .counter-display {
+            font-size: 24px;
+            margin-bottom: 18px;
+            background: linear-gradient(to bottom, #e6d7b7, #d9c9a8);
+            padding: 10px 30px;
+            border-radius: 32px;
+            border: 2px solid #c9a87a;
+            color: #5a3921;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06) inset, 0 3px 8px rgba(255,255,255,0.5);
+            font-weight: 600;
+        }
+        
+        .counter-display span {
+            font-weight: 700;
+            color: #8d5a2d;
+            margin: 0 5px;
+            font-size: 26px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .btn {
+            padding: 13px 22px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Noto Serif SC', serif;
+            transition: all 0.3s;
+            flex: 1;
+            max-width: 150px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-count {
+            background: linear-gradient(to bottom, #a77c47, #7d532a);
+            color: #fff8e6;
+            border: 2px solid #8d6538;
+        }
+        
+        .btn-reset {
+            background: linear-gradient(to bottom, #f0e5d0, #d4c0a1);
+            color: #5a3921;
+            border: 2px solid #c9a87a;
+        }
+        
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+        
+        .btn::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.6s;
+            pointer-events: none;
+        }
+        
+        .btn:active::after {
+            transform: translateY(100%) rotate(30deg);
+        }
+        
+        .footer {
+            margin-top: 18px;
+            font-size: 13px;
+            color: #9e8a6f;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+        }
+        
+        /* 滚动条样式 */
+        .prayer-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .prayer-content::-webkit-scrollbar-track {
+            background: rgba(233, 224, 201, 0.5);
+            border-radius: 3px;
+        }
+        
+        .prayer-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #c9a87a, #b08e5c);
+            border-radius: 3px;
+            border: 1px solid #a77c47;
+        }
+        
+        /* 响应式调整 */
+        @media (max-height: 700px) {
+            .prayer-content {
+                font-size: 16px;
+                max-height: 50vh;
+            }
+            
+            .prayer-content .verse {
+                font-size: 16px;
+                margin: 14px 0;
+            }
+            
+            .counter-display {
+                font-size: 22px;
+                padding: 9px 25px;
+                margin-bottom: 16px;
+            }
+            
+            .counter-display span {
+                font-size: 24px;
+            }
+            
+            .btn {
+                padding: 11px 18px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .title h1 {
+                font-size: 22px;
+            }
+            
+            .prayer-content {
+                font-size: 16px;
+                padding: 8px 4px;
+            }
+            
+            .prayer-content .verse {
+                font-size: 16px;
+            }
+            
+            .counter-display {
+                font-size: 22px;
+            }
+            
+            .counter-display span {
+                font-size: 24px;
+            }
+            
+            .buttons {
+                gap: 12px;
+            }
+            
+            .btn {
+                padding: 11px 14px;
+                font-size: 15px;
+                max-width: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="buddha-pattern"></div>
+    <div class="lotus"></div>
+    
+    <div class="container">
+        <div class="title">
+            <h1>忏悔三昧</h1>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="prayer-content">
+            <p class="verse">
+                往昔所造诸恶业，皆由无始贪嗔痴<br>
+                从身语意之所生，今对佛前求忏悔<br>
+                罪从心起将心忏，心若灭时罪亦亡<br>
+                心灭罪亡两俱空，是则名为真忏悔
+            </p >
+            <p>
+                无论是过去，现在，或是未来。因身、口、意的造作，被我（和我的家族）伤害过的因缘众生。
+                或因身、口、意的造作，所招感的诸多不顺和苦难，不管是身体上的，还是精神上的。
+                我都愿意接受业果法则。并惭愧的忏悔！
+            </p >
+            <p>
+                因为无明，因未闻四种真谛，无量劫来，我们彼此伤害，冤冤相报，枉受诸苦于六道中，无有出期。我们都希望解脱。
+            </p >
+            <p>
+                愿一切被我（和我的家族）伤害过的众生，无精神的痛苦，无身体的痛苦，愿你们保持快乐。
+            </p >
+            <p>
+                愿一切与我（和我的家族）有因缘的鬼道，非人众生，得闻佛法，投生善道，趋向解脱。
+            </p >
+            <p>
+                愿一切与我（和我的家族）有因缘的人或非人众生分享我善业的功德，并回答：善哉！善哉！善哉!
+            </p >
+            <p>
+                愿一切众生分享我的功德。
+            </p >
+
+		 <p class="verse">
+		【回向】
+		</p >
+ 		<p class="verse">
+			愿此殊胜功德，回向法界有情，<br>
+			尽除一切罪障，共成无上菩提。
+		</p >
+            	<p>
+			愿我所有一切功德、福德，回向给我的列祖列宗、先祖先亡、灵界、幽冥界、诸位天、神、仙、龙天护法、守护神、山神、土地、人非人等、历劫的、今世的双亲父母、家亲眷属、冤亲债主、流产、夭折、引产、英烈们、我曾杀害伤害亏欠过的所有众生及他们所有一切因缘众生，所有一切有情无情、有缘无缘、有形无形，一草一木、一沙一尘、万缘合和、虚空法界一切众生，恳请他们归信三宝，修学甚深般若，早成佛道！
+   		</p >    
+ 	</div>
+        
+        <div class="counter-section">
+            <div class="counter-display">已念诵: <span id="count">0</span> 遍</div>
+            <div class="buttons">
+                <button class="btn btn-count" id="countBtn">念诵一遍</button>
+                <button class="btn btn-reset" id="resetBtn">重置计数</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            功德无量 · 福慧双增 · 南无阿弥陀佛
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const countDisplay = document.getElementById('count');
+            const countBtn = document.getElementById('countBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            // 从本地存储获取计数或初始化为0
+            let count = parseInt(localStorage.getItem('prayerCount-chsmdz')) || 0;
+            countDisplay.textContent = count;
+            
+            // 增加计数
+            countBtn.addEventListener('click', function() {
+                count++;
+                countDisplay.textContent = count;
+                localStorage.setItem('prayerCount-chsmdz', count);
+                
+                // 添加视觉反馈
+                const counterSpan = countDisplay.querySelector('span');
+                counterSpan.style.transform = 'scale(1.15)';
+                counterSpan.style.color = '#a77c47';
+                setTimeout(() => {
+                    counterSpan.style.transform = 'scale(1)';
+                    counterSpan.style.color = '#8d5a2d';
+                }, 300);
+            });
+            
+            // 重置计数
+            resetBtn.addEventListener('click', function() {
+                if (confirm('确定要重置念诵计数吗？')) {
+                    count = 0;
+                    countDisplay.textContent = count;
+                    localStorage.setItem('prayerCount-chsmdz', count);
+                    
+                    // 添加视觉反馈
+                    const counterSpan = countDisplay.querySelector('span');
+                    counterSpan.style.transform = 'scale(0.85)';
+                    counterSpan.style.color = '#b08e5c';
+                    setTimeout(() => {
+                        counterSpan.style.transform = 'scale(1)';
+                        counterSpan.style.color = '#8d5a2d';
+                    }, 500);
+                }
+            });
+            
+            // 添加触觉反馈（在支持振动的设备上）
+            countBtn.addEventListener('touchstart', function() {
+                if (navigator.vibrate) {
+                    navigator.vibrate(10);
+                }
+            });
+            
+            // 添加键盘支持
+            document.addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    countBtn.click();
+                } else if (e.key === 'r' || e.key === 'R') {
+                    resetBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
